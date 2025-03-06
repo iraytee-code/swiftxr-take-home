@@ -22,6 +22,7 @@ export default function AddHotspotForm() {
         setNewHotspotData,
     } = useModel();
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [titleError, setTitleError] = useState("");
 
     const handleStartAdding = () => {
         setIsFormOpen(true);
@@ -31,12 +32,31 @@ export default function AddHotspotForm() {
         setIsFormOpen(false);
         setIsAddingHotspot(false);
         setNewHotspotData({ title: "", description: "" });
+        setTitleError("");
     };
 
     // Enable hotspot adding mode
     const handleAddHotspot = () => {
+        if (!newHotspotData.title.trim()) {
+            setTitleError("Title is required");
+            return;
+        }
+
+        setTitleError("");
         setIsAddingHotspot(true);
         toast.info("Click on the model to place your hotspot");
+    };
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setNewHotspotData({
+            ...newHotspotData,
+            title: value,
+        });
+
+        if (value.trim() && titleError) {
+            setTitleError("");
+        }
     };
 
     if (!isFormOpen) {
@@ -67,19 +87,19 @@ export default function AddHotspotForm() {
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="newTitle">Title</Label>
+                    <Label htmlFor="newTitle">
+                        Title <span className="text-destructive">*</span>
+                    </Label>
                     <Input
                         id="newTitle"
                         value={newHotspotData.title}
-                        onChange={(e) =>
-                            setNewHotspotData({
-                                ...newHotspotData,
-                                title: e.target.value,
-                            })
-                        }
+                        onChange={handleTitleChange}
                         placeholder="Hotspot title"
-                        className="bg-background/50"
+                        className={`bg-background/50 ${titleError ? "border-destructive" : ""}`}
                     />
+                    {titleError && (
+                        <p className="text-destructive text-xs">{titleError}</p>
+                    )}
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="newDescription">Description</Label>

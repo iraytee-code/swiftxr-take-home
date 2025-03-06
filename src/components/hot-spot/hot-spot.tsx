@@ -1,9 +1,10 @@
 import React from "react";
 import { Html } from "@react-three/drei";
 import { useModel } from "@/hooks/model-context";
-
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { HotspotType } from "@/types/hot-spot-types";
+import { Info } from "lucide-react";
 
 interface HotspotProps {
     hotspot: HotspotType;
@@ -20,30 +21,27 @@ export default function HotSpot({ hotspot }: HotspotProps) {
     };
 
     return (
-        <group position={[position.x, position.y, position.z]}>
-            <Html
-                center
-                distanceFactor={8}
-                zIndexRange={[100, 0]}
-                className="pointer-events-auto"
-            >
-                <div
-                    className={cn(
-                        "hotspot transition-all duration-300 flex items-center justify-center",
-                        isSelected ? "scale-125 ring-2 ring-white" : ""
-                    )}
-                    onClick={handleClick}
-                >
-                    <span className="text-xs font-bold">
-                        {hotspot.id.split("-")[1].slice(0, 1)}
-                    </span>
-                </div>
-                {isSelected && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap bg-black/75 text-white text-xs px-2 py-1 rounded pointer-events-none animate-fade-in">
-                        {title}
-                    </div>
+        <Html position={position} center>
+            <div
+                onClick={handleClick}
+                className={cn(
+                    "relative flex items-center justify-center cursor-pointer",
+                    "w-8 h-8 rounded-full transition-all duration-200",
+                    isSelected
+                        ? "bg-primary text-primary-foreground scale-125"
+                        : "bg-white text-primary hover:scale-110"
                 )}
-            </Html>
-        </group>
+            >
+                <Info size={8} />
+                {isSelected && (
+                    <Badge
+                        className="absolute -top-8 px-2 py-1 whitespace-nowrap"
+                        variant="secondary"
+                    >
+                        {title}
+                    </Badge>
+                )}
+            </div>
+        </Html>
     );
 }

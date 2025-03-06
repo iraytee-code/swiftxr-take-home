@@ -31,7 +31,7 @@ export default function ModelProvider({ children }: { children: ReactNode }) {
         const newHotspot: HotspotType = {
             id: `hotspot-${Date.now()}`,
             position,
-            title: newHotspotData.title || `Hotspot ${hotspots.length + 1}`,
+            title: newHotspotData.title || ``,
             description: newHotspotData.description || "",
         };
         setHotspots([...hotspots, newHotspot]);
